@@ -21,6 +21,7 @@ export interface UseDraggableArguments {
     roleDescription?: string;
     tabIndex?: number;
   };
+  doNotUnregisterDraggable?: boolean;
 }
 
 export interface DraggableAttributes {
@@ -45,6 +46,7 @@ export function useDraggable({
   data,
   disabled = false,
   attributes,
+  doNotUnregisterDraggable,
 }: UseDraggableArguments) {
   const key = useUniqueId(ID_PREFIX);
   const {
@@ -75,6 +77,8 @@ export function useDraggable({
       draggableNodes.set(id, {id, key, node, activatorNode, data: dataRef});
 
       return () => {
+        if (doNotUnregisterDraggable) return;
+
         const node = draggableNodes.get(id);
 
         if (node && node.key === key) {

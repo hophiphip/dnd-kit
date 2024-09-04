@@ -31,7 +31,8 @@ export interface Arguments
     Pick<
       UseDroppableArguments,
       'resizeObserverConfig' | 'doNotUnregisterDroppable'
-    > {
+    >,
+    Pick<UseDraggableArguments, 'doNotUnregisterDraggable'> {
   animateLayoutChanges?: AnimateLayoutChanges;
   disabled?: boolean | Disabled;
   getNewIndex?: NewIndexGetter;
@@ -50,6 +51,7 @@ export function useSortable({
   resizeObserverConfig,
   transition = defaultTransition,
   doNotUnregisterDroppable,
+  doNotUnregisterDraggable,
 }: Arguments) {
   const {
     items,
@@ -109,6 +111,7 @@ export function useSortable({
       ...userDefinedAttributes,
     },
     disabled: disabled.draggable,
+    doNotUnregisterDraggable,
   });
   const setNodeRef = useCombinedRefs(setDroppableNodeRef, setDraggableNodeRef);
   const isSorting = Boolean(active);
