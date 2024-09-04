@@ -132,13 +132,13 @@ export function useDroppable({
       });
 
       return () => {
-        if (doNotUnregisterDroppable !== true) {
-          dispatch({
-            type: Action.UnregisterDroppable,
-            key,
-            id,
-          });
-        }
+        if (doNotUnregisterDroppable) return;
+
+        dispatch({
+          type: Action.UnregisterDroppable,
+          key,
+          id,
+        });
       };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
