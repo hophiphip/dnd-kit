@@ -28,6 +28,7 @@ export interface UseDroppableArguments {
   disabled?: boolean;
   data?: Data;
   resizeObserverConfig?: ResizeObserverConfig;
+  doNotUnregisterDroppable?: boolean;
 }
 
 const ID_PREFIX = 'Droppable';
@@ -41,11 +42,11 @@ export function useDroppable({
   disabled = false,
   id,
   resizeObserverConfig,
+  doNotUnregisterDroppable,
 }: UseDroppableArguments) {
   const key = useUniqueId(ID_PREFIX);
-  const {active, dispatch, over, measureDroppableContainers} = useContext(
-    InternalContext
-  );
+  const {active, dispatch, over, measureDroppableContainers} =
+    useContext(InternalContext);
   const previous = useRef({disabled});
   const resizeObserverConnected = useRef(false);
   const rect = useRef<ClientRect | null>(null);
@@ -130,12 +131,15 @@ export function useDroppable({
         },
       });
 
-      return () =>
-        dispatch({
-          type: Action.UnregisterDroppable,
-          key,
-          id,
-        });
+      return () => {
+        if (doNotUnregisterDroppable !== true) {
+          dispatch({
+            type: Action.UnregisterDroppable,
+            key,
+            id,
+          });
+        }
+      };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]

@@ -28,7 +28,10 @@ import {useDerivedTransform} from './utilities';
 
 export interface Arguments
   extends Omit<UseDraggableArguments, 'disabled'>,
-    Pick<UseDroppableArguments, 'resizeObserverConfig'> {
+    Pick<
+      UseDroppableArguments,
+      'resizeObserverConfig' | 'doNotUnregisterDroppable'
+    > {
   animateLayoutChanges?: AnimateLayoutChanges;
   disabled?: boolean | Disabled;
   getNewIndex?: NewIndexGetter;
@@ -46,6 +49,7 @@ export function useSortable({
   strategy: localStrategy,
   resizeObserverConfig,
   transition = defaultTransition,
+  doNotUnregisterDroppable,
 }: Arguments) {
   const {
     items,
@@ -84,6 +88,7 @@ export function useSortable({
       updateMeasurementsFor: itemsAfterCurrentSortable,
       ...resizeObserverConfig,
     },
+    doNotUnregisterDroppable,
   });
   const {
     active,
